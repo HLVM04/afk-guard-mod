@@ -1,11 +1,13 @@
 {
-	"required": true,
-	"package": "hlvm.afkguard.mixin.client",
-	"compatibilityLevel": "JAVA_21",
-	"client": [
-		"PlayerDamageMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
+  "required": true,
+  "package": "hlvm.afkguard.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "DamagePacketMixin",
+    "KeyboardMixin",
+    "MouseMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
 	}
 }

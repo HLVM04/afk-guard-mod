@@ -1,5 +1,16 @@
 {
     "key.category.afkguard.keybinds": "AFK Guard",
     "key.afkguard.toggle": "Toggle AFK Guard",
-    "key.afkguard.toggle_auto": "Toggle Auto-AFK"
+    "key.afkguard.toggle_auto": "Toggle Auto-AFK",
+    "config.afkguard.title": "AFK Guard Configuration",
+    "config.afkguard.category.general": "General",
+    "config.afkguard.category.keybinds": "Keybinds",
+    "config.afkguard.autoAfkDelay": "Auto-AFK Delay (seconds)",
+    "config.afkguard.autoAfkDelay.tooltip": "Seconds of inactivity before auto-enabling AFK Guard",
+    "config.afkguard.showStatusMessages": "Show Status Messages",
+    "config.afkguard.showStatusMessages.tooltip": "Show messages in chat when AFK Guard toggles",
+    "config.afkguard.ignorePlayerDamage": "Ignore Player Damage",
+    "config.afkguard.ignorePlayerDamage.tooltip": "If enabled, damage from other players will not trigger disconnect",
+    "config.afkguard.keybind.toggle.tooltip": "Key to toggle AFK Guard manually",
+    "config.afkguard.keybind.toggle_auto.tooltip": "Key to toggle Auto-AFK feature"
 }

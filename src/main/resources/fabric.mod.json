@@ -8,7 +8,7 @@
 		"HLVM"
 	],
 	"contact": {
-		"sources": "https://github.com/hlvm/afk-guard-mod"
+		"sources": "https://github.com/hlvm04/afk-guard-mod"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/afkguard/icon.png",
@@ -19,6 +19,9 @@
 		],
 		"client": [
 			"hlvm.afkguard.AFKGuardClient"
+		],
+		"modmenu": [
+			"hlvm.afkguard.config.ModMenuIntegration"
 		]
 	},
 	"mixins": [
@@ -33,5 +36,9 @@
 		"minecraft": "~1.21.11",
 		"java": ">=21",
 		"fabric-api": "*"
+	},
+	"suggests": {
+		"cloth-config": "*",
+		"modmenu": "*"
 	}
 }

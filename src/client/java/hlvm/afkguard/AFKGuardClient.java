@@ -6,8 +6,14 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 public class AFKGuardClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
+		// Initialize config
+		AFKGuardConfig.getInstance();
+
 		// Register keybindings
 		ModKeybindings.register();
+
+		// Register client commands
+		AFKGuardCommands.register();
 
 		// Register tick event for keybind handling and auto-AFK
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
