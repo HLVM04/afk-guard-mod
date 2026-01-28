@@ -37,17 +37,11 @@ public class DamagePacketMixin {
 
             boolean damagedByPlayer = source instanceof PlayerEntity;
 
-            //AFKGuard.LOGGER.info("DEBUG: Damage Packet Received. SourceID: {}, Entity: {}, IsPlayer: {}",
-            //        sourceId, source, isPlayer);
-
             AFKGuardState state = AFKGuardState.getInstance();
 
             // Update state
             if (state.isAfkGuardEnabled()) {
                 boolean ignore = AFKGuardConfig.getInstance().shouldIgnorePlayerDamage();
-
-                AFKGuard.LOGGER.info("DEBUG: Health Decrease Detected. IgnoreConfig: {}, LastDamageWasPlayer: {}", ignore,
-                        damagedByPlayer);
 
                 if (ignore && damagedByPlayer) {
                     return; // Ignore damage if it was from a player and config is enabled
