@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"package": "hlvm.afkguard.mixin.client",
+	"compatibilityLevel": "JAVA_21",
+	"client": [
+		"PlayerDamageMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "afkguard",
+	"version": "${version}",
+	"name": "AFK Guard",
+	"description": "A client mod that protects AFK players by disconnecting when damage is detected. Includes configurable hotkeys and auto-AFK activation after 30 seconds idle.",
+	"authors": [
+		"HLVM"
+	],
+	"contact": {
+		"sources": "https://github.com/hlvm/afk-guard-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/afkguard/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"main": [
+			"hlvm.afkguard.AFKGuard"
+		],
+		"client": [
+			"hlvm.afkguard.AFKGuardClient"
+		]
+	},
+	"mixins": [
+		"afkguard.mixins.json",
+		{
+			"config": "afkguard.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.18.4",
+		"minecraft": "~1.21.11",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
