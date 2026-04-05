@@ -18,11 +18,11 @@ public class AFKGuardClient implements ClientModInitializer {
 		// Register tick event for keybind handling and auto-AFK
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			// Handle keybind presses
-			while (ModKeybindings.getToggleAfkGuardKey().wasPressed()) {
+			if (ModKeybindings.consumeToggleAfkGuard()) {
 				AFKGuardState.getInstance().toggleAfkGuard();
 			}
 
-			while (ModKeybindings.getToggleAutoAfkKey().wasPressed()) {
+			if (ModKeybindings.consumeToggleAutoAfk()) {
 				AFKGuardState.getInstance().toggleAutoAfk();
 			}
 

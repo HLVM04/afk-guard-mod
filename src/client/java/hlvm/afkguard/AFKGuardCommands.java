@@ -2,9 +2,9 @@ package hlvm.afkguard;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.BoolArgumentType;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 /**
  * Registers client-side commands for configuring AFK Guard.
@@ -15,25 +15,25 @@ public class AFKGuardCommands {
         public static void register() {
                 ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
                         dispatcher.register(
-                                        ClientCommandManager.literal("afkguard")
+                                        ClientCommands.literal("afkguard")
                                                         // Show current config
-                                                        .then(ClientCommandManager.literal("config")
+                                                        .then(ClientCommands.literal("config")
                                                                         .executes(context -> {
                                                                                 AFKGuardConfig config = AFKGuardConfig
                                                                                                 .getInstance();
-                                                                                context.getSource().sendFeedback(Text
+                                                                                context.getSource().sendFeedback(Component
                                                                                                 .literal("§6=== AFK Guard Config ==="));
                                                                                 context.getSource().sendFeedback(
-                                                                                                Text.literal(
+                                                                                                Component.literal(
                                                                                                                 "§7Auto-AFK delay: §f"
                                                                                                                                 + config.getAutoAfkDelaySeconds()
                                                                                                                                 + " seconds"));
-                                                                                context.getSource().sendFeedback(Text
+                                                                                context.getSource().sendFeedback(Component
                                                                                                 .literal("§7Status messages: §f"
                                                                                                                 + (config.shouldShowStatusMessages()
                                                                                                                                 ? "enabled"
                                                                                                                                 : "disabled")));
-                                                                                context.getSource().sendFeedback(Text
+                                                                                context.getSource().sendFeedback(Component
                                                                                                 .literal("§7Ignore player damage: §f"
                                                                                                                 + (config.shouldIgnorePlayerDamage()
                                                                                                                                 ? "enabled"
@@ -41,8 +41,8 @@ public class AFKGuardCommands {
                                                                                 return 1;
                                                                         }))
                                                         // Set auto-AFK delay
-                                                        .then(ClientCommandManager.literal("delay")
-                                                                        .then(ClientCommandManager.argument("seconds",
+                                                        .then(ClientCommands.literal("delay")
+                                                                        .then(ClientCommands.argument("seconds",
                                                                                         IntegerArgumentType.integer(1,
                                                                                                         3600))
                                                                                         .executes(context -> {
@@ -53,15 +53,15 @@ public class AFKGuardCommands {
                                                                                                                 .setAutoAfkDelaySeconds(
                                                                                                                                 seconds);
                                                                                                 context.getSource()
-                                                                                                                .sendFeedback(Text
+                                                                                                                .sendFeedback(Component
                                                                                                                                 .literal("§aAuto-AFK delay set to "
                                                                                                                                                 + seconds
                                                                                                                                                 + " seconds"));
                                                                                                 return 1;
                                                                                         })))
                                                         // Toggle status messages
-                                                        .then(ClientCommandManager.literal("messages")
-                                                                        .then(ClientCommandManager.argument("enabled",
+                                                        .then(ClientCommands.literal("messages")
+                                                                        .then(ClientCommands.argument("enabled",
                                                                                         BoolArgumentType.bool())
                                                                                         .executes(context -> {
                                                                                                 boolean enabled = BoolArgumentType
@@ -71,7 +71,7 @@ public class AFKGuardCommands {
                                                                                                                 .setShowStatusMessages(
                                                                                                                                 enabled);
                                                                                                 context.getSource()
-                                                                                                                .sendFeedback(Text
+                                                                                                                .sendFeedback(Component
                                                                                                                                 .literal(
                                                                                                                                                 "§aStatus messages "
                                                                                                                                                                 + (enabled ? "enabled"
@@ -79,8 +79,8 @@ public class AFKGuardCommands {
                                                                                                 return 1;
                                                                                         })))
                                                         // Toggle ignore player damage
-                                                        .then(ClientCommandManager.literal("ignoreplayerdamage")
-                                                                        .then(ClientCommandManager.argument("enabled",
+                                                        .then(ClientCommands.literal("ignoreplayerdamage")
+                                                                        .then(ClientCommands.argument("enabled",
                                                                                         BoolArgumentType.bool())
                                                                                         .executes(context -> {
                                                                                                 boolean enabled = BoolArgumentType
@@ -90,7 +90,7 @@ public class AFKGuardCommands {
                                                                                                                 .setIgnorePlayerDamage(
                                                                                                                                 enabled);
                                                                                                 context.getSource()
-                                                                                                                .sendFeedback(Text
+                                                                                                                .sendFeedback(Component
                                                                                                                                 .literal(
                                                                                                                                                 "§aIgnore player damage "
                                                                                                                                                                 + (enabled ? "enabled"
@@ -99,17 +99,17 @@ public class AFKGuardCommands {
                                                                                         })))
                                                         // Show help
                                                         .executes(context -> {
-                                                                context.getSource().sendFeedback(Text.literal(
+                                                                context.getSource().sendFeedback(Component.literal(
                                                                                 "§6=== AFK Guard Commands ==="));
                                                                 context.getSource()
-                                                                                .sendFeedback(Text.literal(
+                                                                                .sendFeedback(Component.literal(
                                                                                                 "§e/afkguard config §7- Show current config"));
                                                                 context.getSource().sendFeedback(
-                                                                                Text.literal("§e/afkguard delay <seconds> §7- Set auto-AFK delay"));
+                                                                                Component.literal("§e/afkguard delay <seconds> §7- Set auto-AFK delay"));
                                                                 context.getSource().sendFeedback(
-                                                                                Text.literal("§e/afkguard messages <true|false> §7- Toggle status messages"));
+                                                                                Component.literal("§e/afkguard messages <true|false> §7- Toggle status messages"));
                                                                 context.getSource().sendFeedback(
-                                                                                Text.literal("§e/afkguard ignoreplayerdamage <true|false> §7- Toggle ignore player damage"));
+                                                                                Component.literal("§e/afkguard ignoreplayerdamage <true|false> §7- Toggle ignore player damage"));
                                                                 return 1;
                                                         }));
                 });

@@ -3,13 +3,13 @@ package hlvm.afkguard.mixin.client;
 import hlvm.afkguard.AFKGuardConfig;
 import hlvm.afkguard.AFKGuardState;
 import hlvm.afkguard.AFKGuard;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.packet.s2c.play.EntityDamageS2CPacket;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundDamageEventPacket;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,13 +18,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /**
  * Mixin to intercept damage packets and identify if the attacker is a player.
  */
-@Mixin(ClientPlayNetworkHandler.class)
+@Mixin(ClientPacketListener.class)
 public class DamagePacketMixin {
 
-    @Inject(method = "onEntityDamage", at = @At("HEAD"))
-    private void onEntityDamage(EntityDamageS2CPacket packet, CallbackInfo ci) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        ClientWorld world = client.world;
+    @Inject(method = "handleDamageEvent", at = @At("HEAD"))
+    private void onEntityDamage(ClientboundDamageEventPacket packet, CallbackInfo ci) {
+        Minecraft client = Minecraft.getInstance();
+        ClientLevel world = client.level;
 
         if (world == null || client.player == null)
             return;
@@ -33,9 +33,9 @@ public class DamagePacketMixin {
         if (packet.entityId() == client.player.getId()) {
             // Get the source entity (attacker)
             int sourceId = packet.sourceCauseId();
-            Entity source = world.getEntityById(sourceId);
+            Entity source = world.getEntity(sourceId);
 
-            boolean damagedByPlayer = source instanceof PlayerEntity;
+            boolean damagedByPlayer = source instanceof Player;
 
             AFKGuardState state = AFKGuardState.getInstance();
 
@@ -51,11 +51,11 @@ public class DamagePacketMixin {
                 state.setAfkGuardEnabled(false);
 
                 // Disconnect from server
-                var networkHandler = client.getNetworkHandler();
+                var networkHandler = client.getConnection();
                 if (networkHandler != null) {
                     var connection = networkHandler.getConnection();
                     if (connection != null) {
-                        connection.disconnect(Text.literal("AFK Guard: Disconnected due to damage!"));
+                        connection.disconnect(Component.literal("AFK Guard: Disconnected due to damage!"));
                     }
                 }
             }

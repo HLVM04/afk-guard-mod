@@ -1,41 +1,45 @@
 package hlvm.afkguard;
 
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.util.Identifier;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.Minecraft;
 import org.lwjgl.glfw.GLFW;
 
 /**
  * Registers and manages keybindings for AFK Guard mod.
  */
 public class ModKeybindings {
-    private static KeyBinding toggleAfkGuardKey;
-    private static KeyBinding toggleAutoAfkKey;
-
-    // Create custom category for AFK Guard
-    private static final KeyBinding.Category CATEGORY = KeyBinding.Category.create(
-            Identifier.of(AFKGuard.MOD_ID, "keybinds"));
+    private static boolean wasToggleAfkDown;
+    private static boolean wasToggleAutoDown;
 
     public static void register() {
-        toggleAfkGuardKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.afkguard.toggle",
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_G,
-                CATEGORY));
-
-        toggleAutoAfkKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.afkguard.toggle_auto",
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_H,
-                CATEGORY));
+        wasToggleAfkDown = false;
+        wasToggleAutoDown = false;
     }
 
-    public static KeyBinding getToggleAfkGuardKey() {
-        return toggleAfkGuardKey;
+    public static boolean consumeToggleAfkGuard() {
+        return consumeKeyPress(GLFW.GLFW_KEY_G, true);
     }
 
-    public static KeyBinding getToggleAutoAfkKey() {
-        return toggleAutoAfkKey;
+    public static boolean consumeToggleAutoAfk() {
+        return consumeKeyPress(GLFW.GLFW_KEY_H, false);
+    }
+
+    private static boolean consumeKeyPress(int key, boolean afkToggle) {
+        Minecraft client = Minecraft.getInstance();
+        if (client == null || client.getWindow() == null) {
+            return false;
+        }
+
+        boolean isDown = InputConstants.isKeyDown(client.getWindow(), key);
+        boolean wasDown = afkToggle ? wasToggleAfkDown : wasToggleAutoDown;
+        boolean pressed = isDown && !wasDown;
+
+        if (afkToggle) {
+            wasToggleAfkDown = isDown;
+        } else {
+            wasToggleAutoDown = isDown;
+        }
+
+        return pressed;
     }
 }

@@ -1,8 +1,7 @@
 package hlvm.afkguard;
 
-import net.minecraft.client.MinecraftClient;
-
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 
 /**
  * Central state manager for AFK Guard mod.
@@ -122,9 +121,9 @@ public class AFKGuardState {
     }
 
     private void showStatusMessage(String message) {
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
         if (client.player != null) {
-            client.player.sendMessage(Text.literal(message), true);
+            client.player.sendSystemMessage(Component.literal(message));
         }
     }
 }
